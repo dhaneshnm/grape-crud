@@ -5,10 +5,13 @@ class APITest < MiniTest::Test
                 API
         end
 
-        def test_slash_returns_empty_json
-                get '/api/'
-                assert last_response.ok?
-                empty_hash = {}
-                assert_equal empty_hash,JSON.parse(last_response.body)
+        def test_paths_returns_ok
+		@paths  = YAML.load(File.read(File.expand_path( '../../paths.yml',__FILE__)))
+		@paths.each do |path|
+			get '/api/v1/'+path[0]['path']+'.json'
+			assert last_response.ok?
+			content = JSON.parse(last_response.body)
+			assert !content.nil?
+		end
         end
 end
