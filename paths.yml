@@ -1,1 +1,1 @@
-paths : [{path: "games", modelname: "Game"}]
+[{'path': "schools", 'modelname': "School"}]

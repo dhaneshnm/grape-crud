@@ -4,7 +4,8 @@ require File.expand_path('../crud/request_template', __FILE__)
 class API < Grape::API
 	  prefix 'api'
 	  format :json
-	  paths = [{'modelname' => 'Game','path' => 'games'},{'modelname' => 'School','path' => 'schools'}]
+	  paths  = YAML.load(File.read(File.expand_path( '../paths.yml',__FILE__)))
+	  #paths = [{'modelname' => 'Game','path' => 'games'},{'modelname' => 'School','path' => 'schools'}]
 	  api_classes = []
 	  paths.each do |class_hash|
 	    api_classes << Class.new(Grape::API) do

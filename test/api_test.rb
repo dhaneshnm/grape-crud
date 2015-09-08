@@ -8,7 +8,8 @@ class APITest < MiniTest::Test
         def test_paths_returns_ok
 		@paths  = YAML.load(File.read(File.expand_path( '../../paths.yml',__FILE__)))
 		@paths.each do |path|
-			get '/api/v1/'+path[0]['path']+'.json'
+			url = '/api/v1/'+path['path']+'.json'
+			get url
 			assert last_response.ok?
 			content = JSON.parse(last_response.body)
 			assert !content.nil?
