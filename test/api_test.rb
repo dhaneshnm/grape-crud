@@ -1,6 +1,15 @@
 require File.expand_path('../test_helper.rb', __FILE__)
 class APITest < MiniTest::Test
         include Rack::Test::Methods
+       
+	def setup()
+	   init_db()
+	end
+       	
+	def teardown()
+	   @connection.release_connection 	   
+	end
+
         def app
                 API
         end
@@ -26,7 +35,7 @@ class APITest < MiniTest::Test
                  assert last_response.ok?
 	 	 content = JSON.parse(last_response.body)
 		 assert !content.nil?
-                 assert_equal model.last.to_json, content.to_json		 
+                 assert_equal model.last.to_json, content['data'].to_json		 
 	   end 	    
 	end	
 end
