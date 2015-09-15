@@ -5,16 +5,20 @@ class API < Grape::API
 	  prefix 'api'
 	  format :json
 	  paths  = YAML.load(File.read(File.expand_path( '../paths.yml',__FILE__)))
-	  #paths = [{'modelname' => 'Game','path' => 'games'},{'modelname' => 'School','path' => 'schools'}]
+	  
 	  api_classes = []
 	  paths.each do |class_hash|
 	    api_classes << Class.new(Grape::API) do
 	      include Crud::ErrorHandler
 	      version 'v1'
 	      format :json
-
-	      @@model = Object.const_set(class_hash['modelname'], Class.new(ActiveRecord::Base) {})
-	      @@path = class_hash['path']
+              begin 
+	        @@model = eval(class_hash['modelname'])
+	        @@path = class_hash['path']
+	      rescue
+		@@model = Object.const_set(class_hash['modelname'], Class.new(ActiveRecord::Base) {})
+	  	@@path = class_hash['path']	
+	      end	      
 
 	      def self.model
 	        @@model
@@ -27,7 +31,6 @@ class API < Grape::API
 	      include Crud::RequestTemplate
 	    end
 	  end
-	  # new_class = Object.const_set(dynamic_name, new_class)
 	  api_classes.each do |new_class|
 	    mount new_class
 	  end

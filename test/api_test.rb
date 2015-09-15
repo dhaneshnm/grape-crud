@@ -3,11 +3,11 @@ class APITest < MiniTest::Test
         include Rack::Test::Methods
        
 	def setup()
-	   init_db()
+	  # init_db()
 	end
        	
 	def teardown()
-	   @connection.release_connection 	   
+	   #@connection.release_connection 	   
 	end
 
         def app
@@ -19,7 +19,7 @@ class APITest < MiniTest::Test
 		@paths.each do |path|
 			url = '/api/v1/'+path['path']+'.json'
 			get url
-			assert last_response.ok?
+			assert last_response.ok?, last_response.body
 			content = JSON.parse(last_response.body)
 			assert !content.nil?
 		end
@@ -32,7 +32,7 @@ class APITest < MiniTest::Test
 		 id = model.last.id
 		 url = '/api/v1/'+path['path']+'/'+id.to_s+'.json'
 		 get url
-                 assert last_response.ok?
+                 assert last_response.ok?, last_response.body
 	 	 content = JSON.parse(last_response.body)
 		 assert !content.nil?
                  assert_equal model.last.to_json, content['data'].to_json		 
