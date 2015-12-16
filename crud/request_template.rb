@@ -30,7 +30,6 @@ module Crud
           { data: records, meta: {}, errors: [] }
         end
 
-
         put '/' do
           update_many_records(path, request, model)
         end
@@ -42,7 +41,7 @@ module Crud
         put ':id' do
           response = update_single_record(path, request, model, params[:id])
           response = {} if response.nil?
-          { data: {result: response}, meta: {}, errors: [] }
+          { data: { result: response }, meta: {}, errors: [] }
         end
 
         post '/' do
@@ -62,4 +61,3 @@ module Crud
     end
   end
 end
-
