@@ -28,14 +28,17 @@ class APITest < MiniTest::Test
   def test_id_path
     @paths  = YAML.load(File.read(File.expand_path('../../paths.yml', __FILE__)))
     @paths.each do |path|
-      model = Object.const_set(path['modelname'], Class.new(ActiveRecord::Base) {})
-      id = model.last.id
+      url = '/api/v1/' + path['path'] + '.json'
+      get url
+      assert last_response.ok?, last_response.body
+      content1 = JSON.parse(last_response.body)
+      id = content1['data'].last['id']
       url = '/api/v1/' + path['path'] + '/' + id.to_s + '.json'
       get url
       assert last_response.ok?, last_response.body
       content = JSON.parse(last_response.body)
       assert !content.nil?
-      assert_equal model.last.to_json, content['data'].to_json
+      assert_equal content1['data'].last, content['data']
     end
   end
 end
