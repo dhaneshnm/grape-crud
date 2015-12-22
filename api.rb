@@ -20,7 +20,11 @@ class API < Grape::API
 
       def self.model
         @@model
-       end
+      end
+
+      def self.path
+        @@path
+      end
 
       include Crud::RequestTemplate
     end
