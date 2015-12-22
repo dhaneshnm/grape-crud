@@ -8,7 +8,7 @@ module Crud
       Hash[CGI.parse(request.query_string).map { |key, values| [key.to_sym, values[0] || true] }]
     end
 
-    def split_data(data, model)
+    def split_data(data, _model)
       remainders = data.slice!('id')
       data['id'] = data['id'].to_i
       { primary: data, other_fields: remainders }
@@ -34,7 +34,7 @@ module Crud
       model_instance.update_attributes(data_fields)
     end
 
-    def update_many_records(path, request, model)
+    def update_many_records(_path, request, model)
       records = parse_request(request)[name_string]
       records.each do |record|
         data_hash = split_data(record, model)
@@ -66,8 +66,5 @@ module Crud
     def construct_where(model, query)
       model.where(query)
     end
-
-
-
   end
 end
