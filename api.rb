@@ -1,11 +1,12 @@
 require File.expand_path('../crud/error_handler', __FILE__)
 require File.expand_path('../crud/generic_helpers', __FILE__)
 require File.expand_path('../crud/request_template', __FILE__)
+require 'grape-swagger'
 class API < Grape::API
 	  prefix 'api'
 	  format :json
 	  paths  = YAML.load(File.read(File.expand_path( '../paths.yml',__FILE__)))
-	  #paths = [{'modelname' => 'Game','path' => 'games'},{'modelname' => 'School','path' => 'schools'}]
+
 	  api_classes = []
 	  paths.each do |class_hash|
 	    api_classes << Class.new(Grape::API) do
@@ -31,5 +32,5 @@ class API < Grape::API
 	  api_classes.each do |new_class|
 	    mount new_class
 	  end
-
+	add_swagger_documentation
 end
